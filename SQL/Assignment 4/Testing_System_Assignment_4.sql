@@ -96,8 +96,6 @@ LEFT JOIN typequestion t ON q.TypeID = t.TypeID
 LEFT JOIN `account` a ON q.CreatorID = a.AccountID
 LEFT JOIN answer an ON q.QuestionID = an.QuestionID;
 
-
- 
 --------------------------------------------------------------------------------------------------------------------------------------------------
 --  Question 13: Lấy ra số lượng câu hỏi của mỗi loại tự luận hay trắc nghiệm
 SELECT q.QuestionID, t.TypeName, count(q.QuestionID) AS number_of_questions
@@ -124,9 +122,9 @@ LEFT JOIN `answer` an ON q.QuestionID = an.QuestionID
 GROUP BY an.QuestionID
 HAVING count(an.AnswerID) = 0;
 
------------------------- Exercise 2: Union ------------------
+------------------------ Exercise 2: Union ------------------------
 
--- Question 17: 
+---------- Question 17: 
 -- a) Lấy các account thuộc nhóm thứ 1
 SELECT a.Username, a.FullName, a.AccountID 
 FROM `account` a
@@ -148,7 +146,7 @@ FROM `account` a
 INNER JOIN groupaccount ga ON a.AccountID = ga.AccountID
 WHERE GroupID = 2;
 
--- Question 18: 
+----------- Question 18: 
 -- a) Lấy các group có lớn hơn 5 thành viên
 SELECT g.GroupName, count(ga.AccountID) AS number_of_accounts
 FROM `group` g
