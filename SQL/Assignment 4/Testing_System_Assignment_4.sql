@@ -26,7 +26,7 @@ WHERE PositionName = 'dev';
 SELECT d.DepartmentID, d.DepartmentName, count(a.AccountID) AS number_of_accounts
 FROM department d
 INNER JOIN `account` a ON d.DepartmentID = a.DepartmentID
-GROUP BY d.DepartmentID
+GROUP BY a.DepartmentID
 HAVING count(a.AccountID) > 3;
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ GROUP BY q.CategoryID;
 SELECT q.QuestionID, q.Content, count(e.ExamID) AS number_of_exams
 FROM question q
 LEFT JOIN examquestion e ON q.QuestionID = e.QuestionID
-GROUP BY q.QuestionID
+GROUP BY e.QuestionID
 HAVING count(e.ExamID);
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ HAVING count(e.ExamID);
 SELECT q.QuestionID, q.Content, count(an.AnswerID) AS number_of_answers
 FROM question q
 LEFT JOIN answer an ON q.QuestionID = an.QuestionID
-GROUP BY q.QuestionID
+GROUP BY an.QuestionID
 ORDER BY count(an.AnswerID) DESC
 LIMIT 1;
 
@@ -77,7 +77,7 @@ HAVING count(g.AccountID);
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
 -- Question 10: Tìm chức vụ có ít người nhất
-SELECT p.PositionID, count(a.AccountID) AS number_of_accounts
+SELECT p.PositionID, p.PositionName, count(a.AccountID) AS number_of_accounts
 FROM position p
 LEFT JOIN `account` a ON p.PositionID = a.PositionID
 GROUP BY a.PositionID
@@ -128,36 +128,48 @@ HAVING count(an.AnswerID) = 0;
 
 -- Question 17: 
 -- a) Lấy các account thuộc nhóm thứ 1
-SELECT AccountID FROM groupaccount
+SELECT a.Username, a.FullName, a.AccountID 
+FROM `account` a
+INNER JOIN groupaccount ga ON a.AccountID = ga.AccountID
 WHERE GroupID = 1;
 -- b) Lấy các account thuộc nhóm thứ 2
-SELECT AccountID FROM groupaccount
+SELECT a.Username, a.FullName, a.AccountID 
+FROM `account` a
+INNER JOIN groupaccount ga ON a.AccountID = ga.AccountID
 WHERE GroupID = 2;
 -- c) Ghép 2 kết quả từ câu a) và câu b) sao cho không có record nào trùng nhau
-SELECT AccountID FROM groupaccount
+SELECT a.Username, a.FullName, a.AccountID 
+FROM `account` a
+INNER JOIN groupaccount ga ON a.AccountID = ga.AccountID
 WHERE GroupID = 1
 UNION
-SELECT AccountID FROM groupaccount
+SELECT a.Username, a.FullName, a.AccountID 
+FROM `account` a
+INNER JOIN groupaccount ga ON a.AccountID = ga.AccountID
 WHERE GroupID = 2;
 
 -- Question 18: 
 -- a) Lấy các group có lớn hơn 5 thành viên
-SELECT groupID, count(AccountID) AS number_of_accounts
-FROM groupaccount
-GROUP BY GroupID
-HAVING count(AccountID) > 5;
+SELECT g.GroupName, count(ga.AccountID) AS number_of_accounts
+FROM `group` g
+INNER JOIN groupaccount ga ON g.GroupID = ga.GroupID
+GROUP BY ga.GroupID
+HAVING count(ga.AccountID) > 5;
 -- b) Lấy các group có nhỏ hơn 7 thành viên 
-SELECT groupID, count(AccountID) AS number_of_accounts
-FROM groupaccount
-GROUP BY groupID
-HAVING count(AccountID) < 7;
+SELECT g.GroupName, count(ga.AccountID) AS number_of_accounts
+FROM `group` g
+INNER JOIN groupaccount ga ON g.GroupID = ga.GroupID
+GROUP BY ga.GroupID
+HAVING count(ga.AccountID) < 7;
 -- c) Ghép 2 kết quả từ câu a) và câu b)
-SELECT groupID, count(AccountID) AS number_of_accounts
-FROM groupaccount
-GROUP BY GroupID
-HAVING count(AccountID) > 5
-UNION
-SELECT groupID, count(AccountID) AS number_of_accounts
-FROM groupaccount
-GROUP BY groupID
-HAVING count(AccountID) < 7;
+SELECT g.GroupName, count(ga.AccountID) AS number_of_accounts
+FROM `group` g
+INNER JOIN groupaccount ga ON g.GroupID = ga.GroupID
+GROUP BY ga.GroupID
+HAVING count(ga.AccountID) > 5
+UNION ALl
+SELECT g.GroupName, count(ga.AccountID) AS number_of_accounts
+FROM `group` g
+INNER JOIN groupaccount ga ON g.GroupID = ga.GroupID
+GROUP BY ga.GroupID
+HAVING count(ga.AccountID) < 7;
