@@ -23,21 +23,13 @@ CREATE VIEW v_infor_accounts AS
 SELECT * FROM v_infor_accounts;
 			
 -- Question 3: Tạo view có chứa câu hỏi có những content quá dài (content quá 16 từ  được coi là quá dài) và xóa nó đi
-DROP VIEW IF EXISTS v_list_question_have_long_content;
+
 CREATE VIEW v_list_question_have_long_content AS
 			SELECT QuestionID, Content, length(Content)
             FROM question
             WHERE length(Content) > 16;
 SELECT * FROM v_list_question_have_long_content;
-DELETE FROM question
-WHERE QuestionID IN (SELECT QuestionID FROM v_list_question_have_long_content);
-        
-DELETE FROM answer
-WHERE QuestionID IN (SELECT QuestionID FROM v_list_question_have_long_content);
-        
-DELETE FROM examquestion
-WHERE QuestionID IN (SELECT QuestionID FROM v_list_question_have_long_content);
-
+DROP VIEW IF EXISTS v_list_question_have_long_content;
 -- Question 4: Tạo view có chứa danh sách các phòng ban có nhiều nhân viên nhất
 DROP VIEW IF EXISTS v_list_department_have_the_most_accounts;
 CREATE VIEW v_list_department_have_the_most_accounts AS
